@@ -77,10 +77,11 @@ export default {
     },
     onChange (current) {
       this.index = current
-      // const instance = this.$refs.component[current]
-      // if (instance && instance.fetch) {
-      //   instance.fetch()
-      // }
+      // 拉取当前tab页所需的数据
+      const instance = this.$refs.component[current]
+      if (instance && instance.fetch) {
+        instance.fetch()
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @touchmove.prevent>
     <v-header :seller="seller"></v-header>
     <div class="tab-wrapper">
       <tab :tabs="tabs"></tab>
@@ -8,18 +8,20 @@
 </template>
 
 <script>
+import qs from 'query-string'
+import { getSeller } from 'api'
 import VHeader from 'components/v-header/v-header'
-import Tab from 'components/tab/tab'
 import Goods from 'components/goods/goods'
 import Ratings from 'components/ratings/ratings'
 import Seller from 'components/seller/seller'
-import { getSeller } from 'api'
+import Tab from 'components/tab/tab'
 
 export default {
-  name: 'app',
   data () {
     return {
-      seller: {}
+      seller: {
+        id: qs.parse(location.search).id
+      }
     }
   },
   computed: {
@@ -54,14 +56,16 @@ export default {
   },
   methods: {
     _getSeller () {
-      getSeller().then((seller) => {
-        this.seller = seller
+      getSeller({
+        id: this.seller.id
+      }).then((seller) => {
+        this.seller = Object.assign({}, this.seller, seller)
       })
     }
   },
   components: {
-    VHeader,
-    Tab
+    Tab,
+    VHeader
   }
 }
 </script>
